@@ -11,4 +11,5 @@ RUN apk --update add \
       libstdc++ \
  && rm -rf /tmp/* /var/cache/apk/*
 
+# ADD https://s3.amazonaws.com/downloads.goodguide.com/nodejs-${VERSION}-linux_x64-musl.tar.gz /usr/local/
 ADD nodejs-${VERSION}-linux_x64-musl.tar.gz /usr/local/
