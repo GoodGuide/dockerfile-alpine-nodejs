@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+
+image="$1"
+logFile="bm_$(echo $image | sed 's/[^a-z0-9._-]/_/').log"
+
+cd $(git rev-parse --show-toplevel)/utils/bm
+
+docker run --name node-test --rm -i -p 8080 "${image}" node < simple_web_service.js &
+sleep 1
+
+docker run --link node-test:node olivergw/apachebench bash -c 'ab -n 30000 -c 8 "http://${NODE_PORT_8080_TCP##tcp://}/"' | tee "$logFile"
+
+echo "wrote log to $logFile" >&2
+docker kill node-test
+wait
